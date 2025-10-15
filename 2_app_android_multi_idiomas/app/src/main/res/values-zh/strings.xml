@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello_world">你好，世界</string>
+    <string name="home_title">国际化代码挑战</string>
+    <string name="home_subtitle">由 Kaio Tavares 制作</string>
+    <string name="home_body">此应用程序由 DIO 训练营支持，用于学习和实践</string>
+</resources>

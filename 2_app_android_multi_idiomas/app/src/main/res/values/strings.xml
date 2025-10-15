@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name" translatable="false">InternalizationCodeChallenger</string>
+    <string name="hello_world">Hello World</string>
+    <string name="home_subtitle">Made by Kaio Tavares</string>
+    <string name="home_body">App developed for study and practice, powered by DIO bootcamp</string>
+    <string name="home_title">Internalization Code Chalenger</string>
+</resources>

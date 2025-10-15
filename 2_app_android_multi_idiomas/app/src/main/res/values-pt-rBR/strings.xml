@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello_world">Olá, Mundo</string>
+    <string name="home_title">Desafio de Código de Internacionalização</string>
+    <string name="home_subtitle">Feito por Kaio Tavares</string>
+    <string name="home_body">Aplicativo desenvolvido para estudo e prática, com suporte do bootcamp da DIO</string>
+</resources>
