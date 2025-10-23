@@ -3,7 +3,7 @@ package com.kaiostavaress.eletriccarapp.ui.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.kaiostavaress.eletriccarapp.ui.fragment.CarFragment
+import com.example.eletriccarapp.ui.CarFragment
 import com.kaiostavaress.eletriccarapp.ui.fragment.FavoriteFragment
 
 class TabAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {

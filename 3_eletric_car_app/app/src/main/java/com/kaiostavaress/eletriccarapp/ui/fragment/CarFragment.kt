@@ -1,4 +1,4 @@
-package com.kaiostavaress.eletriccarapp.ui.fragment
+package com.example.eletriccarapp.ui
 
 import android.content.Context
 import android.content.Intent
@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.kaiostavaress.eletriccarapp.R
 import com.kaiostavaress.eletriccarapp.data.CarsApi
+import com.kaiostavaress.eletriccarapp.data.local.CarRepository
 import com.kaiostavaress.eletriccarapp.domain.Carro
 import com.kaiostavaress.eletriccarapp.ui.CalcularAutonomiaActivity
 import com.kaiostavaress.eletriccarapp.ui.adapter.CarAdapter
@@ -34,7 +35,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.net.HttpURLConnection
 import java.net.URL
 
+
 class CarFragment : Fragment() {
+
     lateinit var fabCalcular: FloatingActionButton
     lateinit var listaCarros: RecyclerView
     lateinit var progress: ProgressBar
@@ -42,7 +45,7 @@ class CarFragment : Fragment() {
     lateinit var noInternetText: TextView
     lateinit var carsApi: CarsApi
 
-    var carsArray: ArrayList<Carro> = ArrayList()
+    var carrosArray: ArrayList<Carro> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,6 +65,7 @@ class CarFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         if (checkForInternet(context)) {
+            //callService() -> esse eh outra forma de chamar servicos
             getAllCars()
         } else {
             emptyState()
@@ -78,11 +82,8 @@ class CarFragment : Fragment() {
 
     fun getAllCars() {
         carsApi.getAllCars().enqueue(object : Callback<List<Carro>> {
-            override fun onResponse(
-                call: Call<List<Carro>?>,
-                response: Response<List<Carro>?>
-            ) {
-                if(response.isSuccessful){
+            override fun onResponse(call: Call<List<Carro>>, response: Response<List<Carro>>) {
+                if (response.isSuccessful) {
                     progress.isVisible = false
                     noInternetImage.isVisible = false
                     noInternetText.isVisible = false
@@ -94,14 +95,9 @@ class CarFragment : Fragment() {
                 }
             }
 
-            override fun onFailure(
-                call: Call<List<Carro>?>,
-                t: Throwable
-            ) {
+            override fun onFailure(call: Call<List<Carro>>, t: Throwable) {
                 Toast.makeText(context, R.string.response_error, Toast.LENGTH_LONG).show()
-                Log.e("Erro", t.message.toString())
             }
-
         })
     }
 
@@ -111,7 +107,8 @@ class CarFragment : Fragment() {
         noInternetImage.isVisible = true
         noInternetText.isVisible = true
     }
-    private fun setupView(view: View){
+
+    fun setupView(view: View) {
         view.apply {
             fabCalcular = findViewById(R.id.fab_calcular)
             listaCarros = findViewById(R.id.rv_lista_carros)
@@ -121,22 +118,25 @@ class CarFragment : Fragment() {
         }
     }
 
-    private fun setupList(list: List<Carro>) {
-        val carAdapter = CarAdapter(list)
+    fun setupList(lista: List<Carro>) {
+        val carroAdapter = CarAdapter(lista)
         listaCarros.apply {
             isVisible = true
-            adapter = carAdapter
+            adapter = carroAdapter
+        }
+        carroAdapter.carItemLister = { carro ->
+            val isSaved = CarRepository(requireContext()).saveIfNotExist(carro)
         }
     }
 
-    private fun setupListeners() {
+    fun setupListeners() {
         fabCalcular.setOnClickListener {
             startActivity(Intent(context, CalcularAutonomiaActivity::class.java))
         }
     }
 
     fun callService() {
-        val urlBase = "https://igorbag.github.io/cars-api/cars.json"
+        val urlBase = "http://10.0.2.2:8080/cars"
         progress.isVisible = true
         MyTask().execute(urlBase)
     }
@@ -230,9 +230,10 @@ class CarFragment : Fragment() {
                         bateria = bateria,
                         potencia = potencia,
                         recarga = recarga,
-                        urlPhoto = urlPhoto
+                        urlPhoto = urlPhoto,
+                        isFavorite = false
                     )
-                    carsArray.add(model)
+                    carrosArray.add(model)
                 }
                 progress.isVisible = false
                 noInternetImage.isVisible = false
